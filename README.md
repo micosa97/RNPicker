@@ -3,5 +3,5 @@
 changing every TODO - 'any' types - suppose it shouldn't be like
 extendidng amount of photos on roll dynamically.
 
-#what might have
+# What might be?
 better picker

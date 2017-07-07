@@ -45,7 +45,6 @@ export default class Editor extends React.Component<Props, State> {
                     .then(() => {ToastAndroid.show("Success!", ToastAndroid.SHORT);
                         this.props.navigation.state.params.getPhotos();})
                     .catch(() => ToastAndroid.show("Failure!", ToastAndroid.SHORT));
-
             },
             ()=>{ ToastAndroid.show('Failure!', ToastAndroid.SHORT);}
         );
@@ -77,7 +76,6 @@ export default class Editor extends React.Component<Props, State> {
                        }}
                        resizeMode='cover'
                 />
-                <img/>
                 <View style={styles.square}><EditionTool width={this.state.width} height={this.state.height} setFrame={this.setFrame}/></View>
             </View>
         )

@@ -1,3 +1,4 @@
+
 {
     "compilerOptions": {
         "target": "es2015",
@@ -6,22 +7,22 @@
         "outDir": "build",
         "rootDir": "src",
         "allowSyntheticDefaultImports": true,
-        "noImplicitAny": true,
+        "noImplicitAny": false,
         "experimentalDecorators": true,
         "preserveConstEnums": true,
         "allowJs": true,
-        "sourceMap": true
+        "inlineSourceMap": true,
+        "skipLibCheck": true
     },
-    "filesGlob": [
+    "include": [
         "typings/index.d.ts",
-        "src/**/*.ts",
-        "src/**/*.tsx"
+        "src/**/*.tsx",
+        "src/**/*.ts"
     ],
     "exclude": [
         "index.android.js",
         "index.ios.js",
         "build",
         "node_modules"
-    ],
-    "compileOnSave": false
+    ]
 }

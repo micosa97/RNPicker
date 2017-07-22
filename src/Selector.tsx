@@ -1,5 +1,8 @@
 import * as React from 'react';
-import { View, StyleSheet, CameraRoll, ScrollView, Image, Dimensions, TouchableHighlight, ToastAndroid } from 'react-native';
+import {
+    View, StyleSheet, CameraRoll, ScrollView, Image, Dimensions, TouchableHighlight, ToastAndroid,
+    FlatList, Text
+} from 'react-native';
 
 interface Props {
     navigation: any //TODO! not sure if I should specify types
@@ -11,7 +14,7 @@ interface State {
     index: number;
 }
 
-export default class Selector extends React.Component<Props, State> {
+export class Selector extends React.Component<Props, State> {
     constructor(props) {
         super(props);
         this.state = {
@@ -30,7 +33,7 @@ export default class Selector extends React.Component<Props, State> {
         this.getPhotos();
     }
 
-    setIndex = (index) => {
+    setIndex (index) {
         if (index === this.state.index)
             index = null;
         else
@@ -38,16 +41,20 @@ export default class Selector extends React.Component<Props, State> {
         this.setState({index});
     };
 
-    getPhotos = () => {
+    getPhotos () {
         CameraRoll.getPhotos({
-            first: 30,
+            first: 15,
             assetType: 'All'
         }).then(r => this.setState({photos: r.edges}))
     };
+    onEndReached (argument) {
+    console.warn("!@");
+}
 
     render() {
         return (
             <View style={styles.container}>
+{/*
                 <ScrollView contentContainerStyle={styles.scrollView}>
                     {
                         this.state.photos.map((image: any, i: number) => {
@@ -74,7 +81,33 @@ export default class Selector extends React.Component<Props, State> {
                             )
                         })
                     }
-                </ScrollView>
+                </ScrollView>*/}
+
+                <FlatList
+                    contentContainerStyle={styles.scrollView}
+                    data={this.state.photos}
+                    extraData={this.state.index}
+                    keyExtractor = {(item, index) => index.toString()}
+                    onEndReached={this.onEndReached}
+                    renderItem={({item, index}) =>
+                        <TouchableHighlight
+                            underlayColor='transparent'
+                            style={{opacity: index === this.state.index ? 0.5 : 1}}
+                            onPress={() => {
+                                this.setIndex(index);
+                                if (index === this.state.index) {
+                                    this.props.navigation.navigate("Editor", {image: item.node.image, getPhotos: this.getPhotos});
+                                }
+                            }}>
+
+                            <Image key={`image ` + index.toString()}
+                               style={{
+                                   width: this.state.width / 3,
+                                   height: this.state.width / 3
+                               }}
+                                     source={{uri: item.node.image.uri}}/>
+                        </TouchableHighlight>}
+                />
             </View>
         )
     }

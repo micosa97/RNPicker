@@ -12,7 +12,7 @@ interface State {
     pan2: any, //TODO
 }
 
-export default class EditionTool extends React.Component<Props, State>{
+export class EditionTool extends React.Component<Props, State>{
     panResponder1 : any; //TODO
     panResponder2 : any; //TODO
     panResponder3 : any; //TODO

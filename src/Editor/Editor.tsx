@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {View, StyleSheet, Image, Dimensions, ImageEditor, ToastAndroid, CameraRoll} from 'react-native';
 import Button from 'react-native-button';
-import EditionTool from "./EditionTool";
+import {EditionTool} from "./EditionTool";
 interface Props {
     navigation: any;
 }
@@ -16,7 +16,7 @@ interface State {
         y2 : number,
     }
 }
-export default class Editor extends React.Component<Props, State> {
+export class Editor extends React.Component<Props, State> {
     constructor(props) {
         super(props);
         let scale = Math.min((Dimensions.get('window').width) * 0.7 / this.props.navigation.state.params.image.width, (Dimensions.get('window').height) * 0.7 / this.props.navigation.state.params.image.height);
@@ -36,11 +36,20 @@ export default class Editor extends React.Component<Props, State> {
         };
     };
 
-    savePhoto() {
-        ImageEditor.cropImage(this.props.navigation.state.params.image.uri,
-            { offset:{x:Math.min(this.state.frame.x1,this.state.frame.x2)/this.state.scale,y:Math.min(this.state.frame.y1,this.state.frame.y2)/this.state.scale},
-              size:{width:Math.abs(this.state.frame.x1-this.state.frame.x2)/this.state.scale, height:Math.abs(this.state.frame.y1-this.state.frame.y2)/this.state.scale}},
-            (successURI)=> {
+    private savePhoto() {
+        let offset={
+            x: Math.min(this.state.frame.x1,this.state.frame.x2)/this.state.scale,
+            y: Math.min(this.state.frame.y1,this.state.frame.y2)/this.state.scale
+        };
+        let size= {
+            width:Math.abs(this.state.frame.x1-this.state.frame.x2)/this.state.scale,
+            height:Math.abs(this.state.frame.y1-this.state.frame.y2)/this.state.scale
+        };
+
+    ImageEditor.cropImage(this.props.navigation.state.params.image.uri,
+            { offset: offset,
+              size: size},
+            async (successURI)=> {
                 CameraRoll.saveToCameraRoll(successURI)
                     .then(() => {ToastAndroid.show("Success!", ToastAndroid.SHORT);
                         this.props.navigation.state.params.getPhotos();})
@@ -54,7 +63,7 @@ export default class Editor extends React.Component<Props, State> {
         this.props.navigation.setParams({ handleSave: ()=>this.savePhoto() });
     }
 
-    setFrame (x1: number, x2: number, y1: number, y2: number) :void {
+    private setFrame (x1: number, x2: number, y1: number, y2: number) :void {
         this.setState({
             frame: {
                 x1: x1,
